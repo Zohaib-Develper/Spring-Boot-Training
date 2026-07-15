@@ -1,0 +1,30 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: zohaib
+      changes:
+        - createTable:
+            tableName: api_user
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGINT
+                  constraints:
+                    primaryKeyName: pk_api_user
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: VARCHAR(255)
+              - column:
+                  name: password
+                  type: VARCHAR(255)
+              - column:
+                  name: user_roles
+                  type: VARCHAR(255)
+              - column:
+                  name: created_by
+                  type: TIMESTAMP
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
