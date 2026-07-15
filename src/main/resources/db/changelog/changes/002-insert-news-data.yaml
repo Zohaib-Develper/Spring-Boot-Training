@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: zohaib
+      changes:
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: title
+                  value: "Local Elections Set for Next Month"
+              - column:
+                  name: details
+                  value: "The election commission has announced voting will take place next month across all districts."
+              - column:
+                  name: reported_by
+                  value: "Ayesha Khan"
+              - column:
+                  name: reported_at
+                  valueDate: "2026-07-01T09:15:00"
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: title
+                  value: "New Metro Line Opens Downtown"
+              - column:
+                  name: details
+                  value: "The new metro line connecting downtown to the suburbs officially opened today, cutting commute times in half."
+              - column:
+                  name: reported_by
+                  value: "Bilal Ahmed"
+              - column:
+                  name: reported_at
+                  valueDate: "2026-07-03T14:30:00"
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: title
+                  value: "Tech Company Announces Layoffs"
+              - column:
+                  name: details
+                  value: "A major tech firm announced it will cut 5% of its workforce as part of a broader restructuring plan."
+              - column:
+                  name: reported_by
+                  value: "Sana Malik"
+              - column:
+                  name: reported_at
+                  valueDate: "2026-07-05T11:00:00"
+        - insert:
+            tableName: news
+            columns:
+              - column:
+                  name: title
+                  value: "Heavy Rainfall Warning Issued"
+              - column:
+                  name: details
+                  value: "The meteorological department has issued a heavy rainfall warning for the next 48 hours across the region."
+              - column:
+                  name: reported_by
+                  value: "Ayesha Khan"
+              - column:
+                  name: reported_at
+                  valueDate: "2026-07-08T07:45:00"

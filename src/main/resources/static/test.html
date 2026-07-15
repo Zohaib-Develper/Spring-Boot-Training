@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>news-api :: request console</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root{
+            --bg:#0b0f0d; --panel:#10150f; --panel-2:#141b13; --line:#22291f;
+            --text:#e7ece5; --text-dim:#8b9a86; --text-faint:#4d5a49;
+            --green:#7fe7a5; --green-dim:#4b9e6a;
+            --amber:#e8a33d; --red:#e8735a; --blue:#6fb7e8;
+            --mono:'IBM Plex Mono', ui-monospace, monospace;
+            --sans:'Inter', system-ui, sans-serif;
+        }
+        *{ box-sizing:border-box; margin:0; padding:0; }
+        body{
+            background: radial-gradient(1200px 600px at 15% -10%, rgba(127,231,165,0.06), transparent 60%), var(--bg);
+            color:var(--text); font-family:var(--sans); line-height:1.5; -webkit-font-smoothing:antialiased;
+        }
+        @media (prefers-reduced-motion: reduce){ *{ animation-duration:.001ms !important; transition-duration:.001ms !important; } }
+
+        .wrap{ max-width: 1040px; margin:0 auto; padding: 0 20px 60px; }
+
+        header.top{
+            border-bottom:1px solid var(--line);
+            padding: 18px 0;
+            display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;
+            margin-bottom: 28px;
+        }
+        header.top h1{
+            font-family:var(--mono); font-size:15px; font-weight:600;
+            display:flex; align-items:center; gap:8px;
+        }
+        header.top h1 .dot{
+            width:7px; height:7px; border-radius:50%; background:var(--green);
+            box-shadow:0 0 8px rgba(127,231,165,0.7);
+            animation:pulse 2.4s ease-in-out infinite;
+        }
+        @keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+
+        .baseurl{ display:flex; align-items:center; gap:8px; font-family:var(--mono); font-size:12px; color:var(--text-dim); }
+        .baseurl input{
+            background:var(--panel); border:1px solid var(--line); color:var(--text);
+            font-family:var(--mono); font-size:12px; padding:6px 10px; border-radius:6px; width:280px;
+        }
+        .baseurl input:focus{ outline:none; border-color:var(--green-dim); }
+
+        .panelgrid{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+        @media (max-width:800px){ .panelgrid{ grid-template-columns:1fr; } }
+
+        .card{
+            background:var(--panel); border:1px solid var(--line); border-radius:10px; overflow:hidden;
+        }
+        .card-head{
+            display:flex; align-items:center; gap:10px;
+            padding:12px 16px; border-bottom:1px solid var(--line); background:var(--panel-2);
+        }
+        .method{
+            font-family:var(--mono); font-size:11px; font-weight:700; letter-spacing:.03em;
+            padding:3px 8px; border-radius:4px; color:var(--bg);
+        }
+        .method.get{ background:var(--green); }
+        .method.post{ background:var(--blue); }
+        .method.put{ background:var(--amber); }
+        .method.delete{ background:var(--red); }
+        .card-head .path{ font-family:var(--mono); font-size:12.5px; color:var(--text-dim); }
+        .card-head .desc{ margin-left:auto; font-size:11px; color:var(--text-faint); font-family:var(--mono); }
+
+        .card-body{ padding:14px 16px; }
+        .field{ margin-bottom:10px; }
+        .field label{
+            display:block; font-family:var(--mono); font-size:10.5px; color:var(--text-faint);
+            margin-bottom:4px; letter-spacing:.03em; text-transform:uppercase;
+        }
+        .field input, .field textarea{
+            width:100%; background:var(--bg); border:1px solid var(--line); color:var(--text);
+            font-family:var(--mono); font-size:12.5px; padding:8px 10px; border-radius:6px; resize:vertical;
+        }
+        .field input:focus, .field textarea:focus{ outline:none; border-color:var(--green-dim); }
+        .field textarea{ min-height:110px; line-height:1.5; }
+
+        .row{ display:flex; gap:10px; }
+        .row .field{ flex:1; }
+
+        button.send{
+            font-family:var(--mono); font-size:12px; font-weight:600; letter-spacing:.02em;
+            background:transparent; color:var(--green); border:1px solid var(--green-dim);
+            padding:8px 14px; border-radius:6px; cursor:pointer; transition: all .15s ease;
+            margin-top: 2px;
+        }
+        button.send:hover{ background:rgba(127,231,165,0.1); border-color:var(--green); }
+        button.send:active{ transform: translateY(1px); }
+        button.send:disabled{ opacity:.4; cursor:default; }
+
+        .resp{
+            margin-top:12px; border-top:1px dashed var(--line); padding-top:10px;
+            font-family:var(--mono); font-size:11.5px;
+        }
+        .resp .status{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+        .resp .status .code{ font-weight:700; padding:1px 7px; border-radius:4px; }
+        .resp .status .code.s2{ background:rgba(127,231,165,0.15); color:var(--green); }
+        .resp .status .code.s4{ background:rgba(232,163,61,0.15); color:var(--amber); }
+        .resp .status .code.s5, .resp .status .code.err{ background:rgba(232,115,90,0.15); color:var(--red); }
+        .resp .status .time{ color:var(--text-faint); }
+        .resp pre{
+            background:var(--bg); border:1px solid var(--line); border-radius:6px;
+            padding:10px 12px; color:var(--text-dim); overflow-x:auto; max-height:220px;
+            white-space:pre-wrap; word-break:break-word;
+        }
+        .resp .empty{ color:var(--text-faint); font-style:normal; }
+
+        footer{
+            margin-top:40px; padding-top:20px; border-top:1px solid var(--line);
+            font-family:var(--mono); font-size:11px; color:var(--text-faint);
+            display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px;
+        }
+        ::selection{ background:rgba(127,231,165,0.25); }
+    </style>
+</head>
+<body>
+<div class="wrap">
+
+    <header class="top">
+        <h1><span class="dot"></span>news-api request console</h1>
+        <div class="baseurl">
+            <label for="baseUrl">base&nbsp;url</label>
+            <input id="baseUrl" type="text" value="http://localhost:8080/api/v1/news">
+        </div>
+    </header>
+
+    <div class="panelgrid">
+
+        <!-- GET all -->
+        <div class="card">
+            <div class="card-head">
+                <span class="method get">GET</span>
+                <span class="path">/</span>
+                <span class="desc">list all</span>
+            </div>
+            <div class="card-body">
+                <button class="send" data-action="getAll">Send request</button>
+                <div class="resp" id="resp-getAll"><span class="empty">no request sent yet</span></div>
+            </div>
+        </div>
+
+        <!-- GET by id -->
+        <div class="card">
+            <div class="card-head">
+                <span class="method get">GET</span>
+                <span class="path">/{id}</span>
+                <span class="desc">find one</span>
+            </div>
+            <div class="card-body">
+                <div class="field">
+                    <label for="getId">id</label>
+                    <input id="getId" type="number" placeholder="1" value="1">
+                </div>
+                <button class="send" data-action="getOne">Send request</button>
+                <div class="resp" id="resp-getOne"><span class="empty">no request sent yet</span></div>
+            </div>
+        </div>
+
+        <!-- POST -->
+        <div class="card">
+            <div class="card-head">
+                <span class="method post">POST</span>
+                <span class="path">/</span>
+                <span class="desc">create</span>
+            </div>
+            <div class="card-body">
+                <div class="field">
+                    <label for="postBody">request body (json)</label>
+                    <textarea id="postBody">{
+  "title": "Sample News Title",
+  "details": "Some details about this news item.",
+  "reportedBy": "Zohaib Musharaf",
+  "reportedAt": "2026-07-09T16:00:00"
+}</textarea>
+                </div>
+                <button class="send" data-action="post">Send request</button>
+                <div class="resp" id="resp-post"><span class="empty">no request sent yet</span></div>
+            </div>
+        </div>
+
+        <!-- PUT -->
+        <div class="card">
+            <div class="card-head">
+                <span class="method put">PUT</span>
+                <span class="path">/{id}</span>
+                <span class="desc">update</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="field">
+                        <label for="putId">id</label>
+                        <input id="putId" type="number" placeholder="1" value="1">
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="putBody">request body (json)</label>
+                    <textarea id="putBody">{
+  "title": "Updated News Title",
+  "details": "Updated details about this news item.",
+  "reportedBy": "Zohaib Musharaf",
+  "reportedAt": "2026-07-09T16:00:00"
+}</textarea>
+                </div>
+                <button class="send" data-action="put">Send request</button>
+                <div class="resp" id="resp-put"><span class="empty">no request sent yet</span></div>
+            </div>
+        </div>
+
+        <!-- DELETE -->
+        <div class="card">
+            <div class="card-head">
+                <span class="method delete">DELETE</span>
+                <span class="path">/{id}</span>
+                <span class="desc">remove</span>
+            </div>
+            <div class="card-body">
+                <div class="field">
+                    <label for="deleteId">id</label>
+                    <input id="deleteId" type="number" placeholder="1" value="1">
+                </div>
+                <button class="send" data-action="delete">Send request</button>
+                <div class="resp" id="resp-delete"><span class="empty">no request sent yet</span></div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <span>CORS must be enabled on the backend for browser fetch to work — see note below the console</span>
+        <span id="clock"></span>
+    </footer>
+
+    <div style="margin-top:18px; font-family:var(--mono); font-size:11px; color:var(--text-faint); line-height:1.7;">
+        Note: PUT is only wired up on the frontend here — your <b>NewsController</b> currently has GET (both), and DELETE.
+        Add a <code style="color:var(--text-dim);">@PutMapping("/{id}")</code> handler (and matching service/repository method)
+        before the PUT card will return anything but a 405.
+    </div>
+
+</div>
+
+<script>
+    const baseUrlEl = document.getElementById('baseUrl');
+
+    function statusClass(code){
+        if (code >= 200 && code < 300) return 's2';
+        if (code >= 400 && code < 500) return 's4';
+        if (code >= 500) return 's5';
+        return 'err';
+    }
+
+    async function send(action, {method, path = '', body = null}) {
+        const respEl = document.getElementById('resp-' + action);
+        const btn = document.querySelector(`[data-action="${action}"]`);
+        btn.disabled = true;
+        respEl.innerHTML = '<span class="empty">sending…</span>';
+
+        const url = baseUrlEl.value.replace(/\/$/, '') + path;
+        const start = performance.now();
+
+        try {
+            const opts = { method, headers: {} };
+            if (body !== null) {
+                opts.headers['Content-Type'] = 'application/json';
+                opts.body = body;
+            }
+            const res = await fetch(url, opts);
+            const ms = Math.round(performance.now() - start);
+            let text = await res.text();
+            let pretty = text;
+            try { pretty = JSON.stringify(JSON.parse(text), null, 2); } catch (e) { /* not json, leave as-is */ }
+
+            respEl.innerHTML = `
+        <div class="status">
+          <span class="code ${statusClass(res.status)}">${res.status} ${res.statusText}</span>
+          <span class="time">${ms}ms · ${method} ${url}</span>
+        </div>
+        <pre>${pretty ? escapeHtml(pretty) : '(empty body)'}</pre>
+      `;
+        } catch (err) {
+            const ms = Math.round(performance.now() - start);
+            respEl.innerHTML = `
+        <div class="status">
+          <span class="code err">NETWORK ERROR</span>
+          <span class="time">${ms}ms · ${method} ${url}</span>
+        </div>
+        <pre>${escapeHtml(String(err))}\n\nLikely CORS — the backend must allow requests from this page's origin (e.g. @CrossOrigin on the controller, or a global CorsConfiguration), since this file is opened as a local file / different origin than localhost:8080.</pre>
+      `;
+        } finally {
+            btn.disabled = false;
+        }
+    }
+
+    function escapeHtml(str){
+        return str.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    }
+
+    document.querySelector('[data-action="getAll"]').addEventListener('click', () => {
+        send('getAll', { method: 'GET', path: '' });
+    });
+
+    document.querySelector('[data-action="getOne"]').addEventListener('click', () => {
+        const id = document.getElementById('getId').value || '1';
+        send('getOne', { method: 'GET', path: '/' + id });
+    });
+
+    document.querySelector('[data-action="post"]').addEventListener('click', () => {
+        const body = document.getElementById('postBody').value;
+        send('post', { method: 'POST', path: '', body });
+    });
+
+    document.querySelector('[data-action="put"]').addEventListener('click', () => {
+        const id = document.getElementById('putId').value || '1';
+        const body = document.getElementById('putBody').value;
+        send('put', { method: 'PUT', path: '/' + id, body });
+    });
+
+    document.querySelector('[data-action="delete"]').addEventListener('click', () => {
+        const id = document.getElementById('deleteId').value || '1';
+        send('delete', { method: 'DELETE', path: '/' + id });
+    });
+
+    function tickClock(){
+        document.getElementById('clock').textContent = new Date().toLocaleTimeString();
+    }
+    tickClock();
+    setInterval(tickClock, 1000);
+</script>
+</body>
+</html>

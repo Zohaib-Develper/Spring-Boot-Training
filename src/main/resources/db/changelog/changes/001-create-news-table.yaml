@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: zohaib
+      changes:
+        - createTable:
+            tableName: news
+            columns:
+              - column:
+                  name: news_id
+                  type: INT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: details
+                  type: VARCHAR(1000)
+              - column:
+                  name: reported_by
+                  type: VARCHAR(255)
+              - column:
+                  name: reported_at
+                  type: TIMESTAMP

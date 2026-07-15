@@ -1,0 +1,49 @@
+spring:
+  application:
+    name: lecture02
+  boot:
+    admin:
+      context-path: /admin
+  security:
+    user:
+      name: test
+      password: test
+      roles: ADMIN
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+logging:
+  level:
+    sql: debug
+    web: debug
+#    liquibase: debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+  tracing:
+    export:
+      enabled: true
+    sampling:
+      probability: 1.0
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          endpoint: http://localhost:4317
+          transport: gRPC
+    metrics:
+      export:
+        enabled: false
+  otlp:
+    metrics:
+      export:
+        enabled: false
