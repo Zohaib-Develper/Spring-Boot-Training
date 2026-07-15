@@ -47,3 +47,5 @@ management:
     metrics:
       export:
         enabled: false
+initial:
+  message: Hello from application.yaml
