@@ -5,6 +5,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
 @Configuration
 public class ApiSecurityConfiguration {
@@ -18,8 +20,9 @@ public class ApiSecurityConfiguration {
                         .anyRequest().authenticated())
                 .formLogin(config -> {
                 })
-                .csrf(config -> config.disable());
-
+                .csrf(config -> config.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                        .csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()));//To prevent XOR encoding
+        //with http-only false property allows frontend js to read the cookie value
         return http.build();
     }
 }

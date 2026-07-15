@@ -34,7 +34,7 @@ public class NewsController {
     }
 
     @PostMapping("")
-    News createNews(@Valid @RequestBody News news){
+    News createNews(@Valid @RequestBody News news, @RequestHeader(value = "X-XSRF-TOKEN", required = false) String csrfToken){
         return newsService.createNews(news);
     }
 
