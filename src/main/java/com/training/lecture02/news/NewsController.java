@@ -57,7 +57,7 @@ public class NewsController {
                                        @PathVariable int newsId, @Valid @RequestBody News news, Authentication auth) {
         Optional<News> value = newsService.findOne(newsId);
         if (value.isPresent()) {
-            if (auth.getName().equals(value.get().getReportedBy())) {
+            if (auth.getName().equals(value.get().getReportedBy()) || hasRole(auth,"EDITOR")) {
                 return ResponseEntity.ok(newsService.update(newsId, news));
             }
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -75,5 +75,11 @@ public class NewsController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.notFound().build();
+    }
+
+    private boolean hasRole(Authentication auth, String role) {
+        String target = "ROLE_" + role;
+        return auth.getAuthorities().stream()
+                .anyMatch(authority -> authority.getAuthority().equals(target));
     }
 }
