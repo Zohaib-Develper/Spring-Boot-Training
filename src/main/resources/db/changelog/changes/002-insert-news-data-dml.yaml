@@ -14,7 +14,7 @@ databaseChangeLog:
                   value: "The election commission has announced voting will take place next month across all districts."
               - column:
                   name: reported_by
-                  value: "Ayesha Khan"
+                  value: "reporter"
               - column:
                   name: reported_at
                   valueDate: "2026-07-01T09:15:00"
@@ -29,7 +29,7 @@ databaseChangeLog:
                   value: "The new metro line connecting downtown to the suburbs officially opened today, cutting commute times in half."
               - column:
                   name: reported_by
-                  value: "Bilal Ahmed"
+                  value: "editor"
               - column:
                   name: reported_at
                   valueDate: "2026-07-03T14:30:00"
@@ -44,7 +44,7 @@ databaseChangeLog:
                   value: "A major tech firm announced it will cut 5% of its workforce as part of a broader restructuring plan."
               - column:
                   name: reported_by
-                  value: "Sana Malik"
+                  value: "editor"
               - column:
                   name: reported_at
                   valueDate: "2026-07-05T11:00:00"
@@ -59,7 +59,7 @@ databaseChangeLog:
                   value: "The meteorological department has issued a heavy rainfall warning for the next 48 hours across the region."
               - column:
                   name: reported_by
-                  value: "Ayesha Khan"
+                  value: "editor"
               - column:
                   name: reported_at
                   valueDate: "2026-07-08T07:45:00"

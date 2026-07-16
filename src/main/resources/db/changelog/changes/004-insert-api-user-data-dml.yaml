@@ -45,24 +45,3 @@ databaseChangeLog:
               - column:
                   name: created_at
                   valueComputed: CURRENT_TIMESTAMP
-        - insert:
-            tableName: api_user
-            columns:
-              - column:
-                  name: user_id
-                  valueNumeric: 3
-              - column:
-                  name: username
-                  value: admin
-              - column:
-                  name: password
-                  value: "{noop}admin"
-              - column:
-                  name: user_roles
-                  value: ADMIN
-              - column:
-                  name: created_by
-                  valueComputed: CURRENT_TIMESTAMP
-              - column:
-                  name: created_at
-                  valueComputed: CURRENT_TIMESTAMP

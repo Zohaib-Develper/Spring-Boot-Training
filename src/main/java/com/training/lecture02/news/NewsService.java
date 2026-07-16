@@ -1,46 +1,49 @@
 package com.training.lecture02.news;
 
-import jakarta.transaction.Transactional;
-import org.springframework.data.domain.Page;
-import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.util.Optional;
 
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
 
 @Service
 public class NewsService {
+
     private final NewsRepository newsRepository;
 
-    NewsService(NewsRepository newsRepository){
+    public NewsService(NewsRepository newsRepository) {
         this.newsRepository = newsRepository;
     }
 
-    public Page<News> getAllNews(Pageable pageable){
-        return newsRepository.findAll(pageable);
+    public Page<News> findAll(int page, int size) {
+        if (page < 0) {
+            page = 0;
+        }
+        if (size <= 0 || size > 100) {
+            size = 100;
+        }
+        return newsRepository.findAll(PageRequest.of(page, size));
     }
 
-    public News getNewsById(int id){
-        return newsRepository.findById(id).orElseThrow(() -> new NewsNotFoundException(id));
+    public Optional<News> findOne(int newsId) {
+        return newsRepository.findById(newsId);
     }
 
-    public News deleteNews(int id) {
-        News news = newsRepository.findById(id)
-                .orElseThrow(() -> new NewsNotFoundException(id));
-        newsRepository.deleteById(id);
-        return news;
-    }
-
-    public News createNews(News news){
+    public News create(News news) {
+        news.setReportedAt(LocalDateTime.now());
         return newsRepository.save(news);
     }
 
-    @Transactional
-    public News updateNews(int id,News news){
-        News existing = newsRepository.findById(id).orElseThrow(() -> new NewsNotFoundException(id));
+    public News update(int newsId, News news) {
+        News existing = newsRepository.findById(newsId).orElseThrow();
         existing.setTitle(news.getTitle());
         existing.setDetails(news.getDetails());
-        existing.setReportedAt(news.getReportedAt());
-        existing.setReportedBy(news.getReportedBy());
-
+        existing.setReportedAt(LocalDateTime.now());
         return newsRepository.save(existing);
+    }
+
+    public void delete(int newsId) {
+        newsRepository.deleteById(newsId);
     }
 }
