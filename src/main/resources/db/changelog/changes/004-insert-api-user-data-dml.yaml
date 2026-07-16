@@ -14,7 +14,7 @@ databaseChangeLog:
                   value: reporter
               - column:
                   name: password
-                  value: "$2b$12$WmVBBQHWrhWf5LjUt0jF/On4qHfflxlymJMrfH3zRqhOCbNsbDLlm"
+                  value: "{noop}reporter"
               - column:
                   name: user_roles
                   value: REPORTER
@@ -35,7 +35,7 @@ databaseChangeLog:
                   value: editor
               - column:
                   name: password
-                  value: "$2b$12$ysVv4O42f82fwi9A05oItuab9Z1G97R20F4QNX8s94pFWAY0q42HW"
+                  value: "{noop}editor"
               - column:
                   name: user_roles
                   value: EDITOR
@@ -56,7 +56,7 @@ databaseChangeLog:
                   value: admin
               - column:
                   name: password
-                  value: "$2b$12$gG4I/6Z3qIBteKCoNZaQTuQ1cpD6eoBe8iajQgzdrJ/CPOiZcqlqW"
+                  value: "{noop}admin"
               - column:
                   name: user_roles
                   value: ADMIN
