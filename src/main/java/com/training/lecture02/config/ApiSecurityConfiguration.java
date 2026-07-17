@@ -2,6 +2,7 @@ package com.training.lecture02.config;
 
 import com.training.lecture02.users.ApiUser;
 import com.training.lecture02.users.ApiUserService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -9,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.oauth2.core.DefaultOAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
@@ -49,9 +51,25 @@ public class ApiSecurityConfiguration {
                                     user.getUsername(), Map.of("sub", user.getUsername()), authorities
                             );
                         }
-                )));
+                )))
+                .oauth2Login(oauth2 -> oauth2
+                        .successHandler((request, response, authentication) -> {
+                            OAuth2User principal = (OAuth2User) authentication.getPrincipal();
+                            String email = principal.getAttribute("email");
+
+                            if (email == null) {
+                                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email not provided by provider");
+                                return;
+                            }
 
 
+                            ApiUser user = userService.findOrCreateByEmail(email);
+                            String token = userService.generateToken(user.getUsername());
+
+                            response.setContentType("application/json");
+                            response.getWriter().write("{\"access_token\":\"" + token + "\"}");
+                        })
+                );
         return http.build();
     }
 }

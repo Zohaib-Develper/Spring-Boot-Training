@@ -1,5 +1,7 @@
 package com.training.lecture02.users;
 
+import jakarta.transaction.Transactional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -45,5 +47,21 @@ public class ApiUserService implements UserDetailsService {
             throw new OAuth2AuthenticationException("Invalid");
         }
         return user.get();
+    }
+
+    @Transactional
+    public ApiUser findOrCreateByEmail(String email) {
+        return apiUserRepository.findByUsername(email)
+                .orElseGet(() -> {
+                    try {
+                        ApiUser newUser = new ApiUser();
+                        newUser.setUsername(email);
+                        newUser.setUserRoles("EDITOR");
+                        return apiUserRepository.save(newUser);
+                    } catch (DataIntegrityViolationException e) {
+                        return apiUserRepository.findByUsername(email)
+                                .orElseThrow(() -> e);
+                    }
+                });
     }
 }

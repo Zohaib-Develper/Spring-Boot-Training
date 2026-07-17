@@ -5,10 +5,16 @@ spring:
     admin:
       context-path: /admin
   security:
-    user:
-      name: test
-      password: test
-      roles: ADMIN
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+              - openid
   jpa:
     open-in-view: false
     hibernate:

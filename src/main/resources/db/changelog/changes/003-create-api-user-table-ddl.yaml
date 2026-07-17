@@ -9,32 +9,39 @@ databaseChangeLog:
               - column:
                   name: user_id
                   type: BIGINT
+                  autoIncrement: true
                   constraints:
-                    primaryKeyName: pk_api_user
                     primaryKey: true
+                    primaryKeyName: pk_api_user
                     nullable: false
+
               - column:
                   name: username
                   type: VARCHAR(255)
                   constraints:
-                    unique: true
                     nullable: false
-                    uniqueConstraintName: uk_api_user
+                    unique: true
+                    uniqueConstraintName: uk_api_user_username
+
               - column:
                   name: password
                   type: VARCHAR(255)
+
               - column:
                   name: user_roles
                   type: VARCHAR(255)
+
               - column:
                   name: created_by
                   type: TIMESTAMP
+
               - column:
                   name: created_at
                   type: TIMESTAMP
+
               - column:
                   name: token
                   type: VARCHAR(255)
                   constraints:
                     unique: true
-                    uniqueConstraintName: uk_api_user
+                    uniqueConstraintName: uk_api_user_token
