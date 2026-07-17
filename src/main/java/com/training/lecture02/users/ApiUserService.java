@@ -1,12 +1,15 @@
 package com.training.lecture02.users;
 
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class ApiUserService implements UserDetailsService {
@@ -27,5 +30,20 @@ public class ApiUserService implements UserDetailsService {
                 .password(user.get().getPassword())
                 .roles(user.get().getUserRoles().split(","))
                 .build();
+    }
+
+    public String generateToken(String username) {
+        ApiUser user = apiUserRepository.findByUsername(username).get();
+        user.setToken(UUID.randomUUID().toString());
+        apiUserRepository.save(user);
+        return user.getToken();
+    }
+
+    public ApiUser findByToken(String token) {
+        Optional<ApiUser> user = apiUserRepository.findByToken(token);
+        if(user.isEmpty()) {
+            throw new OAuth2AuthenticationException("Invalid");
+        }
+        return user.get();
     }
 }

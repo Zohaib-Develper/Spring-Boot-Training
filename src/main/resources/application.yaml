@@ -20,6 +20,8 @@ logging:
     sql: debug
     web: debug
 #    liquibase: debug
+#    org.springframework.security: debug
+
 
 management:
   endpoints:

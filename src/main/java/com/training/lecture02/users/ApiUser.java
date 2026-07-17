@@ -35,4 +35,6 @@ public class ApiUser {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt;
+
+    private String token;
 }

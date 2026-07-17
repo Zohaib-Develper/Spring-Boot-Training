@@ -16,6 +16,10 @@ databaseChangeLog:
               - column:
                   name: username
                   type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    nullable: false
+                    uniqueConstraintName: uk_api_user
               - column:
                   name: password
                   type: VARCHAR(255)
@@ -28,3 +32,9 @@ databaseChangeLog:
               - column:
                   name: created_at
                   type: TIMESTAMP
+              - column:
+                  name: token
+                  type: VARCHAR(255)
+                  constraints:
+                    unique: true
+                    uniqueConstraintName: uk_api_user
