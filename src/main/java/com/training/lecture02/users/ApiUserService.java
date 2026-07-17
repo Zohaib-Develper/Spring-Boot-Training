@@ -64,4 +64,8 @@ public class ApiUserService implements UserDetailsService {
                     }
                 });
     }
+
+    public ApiUser findByUsername(String username) {
+        return apiUserRepository.findByUsername(username).get();
+    }
 }

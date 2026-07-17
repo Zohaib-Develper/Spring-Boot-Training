@@ -57,3 +57,7 @@ management:
         enabled: false
 initial:
   message: Hello from application.yaml
+
+jwt:
+  secret: 4de4d95870f7392d8d0ef1b8b5df644ca3c7d1b5c74d1d7634ab8bb746bd53d9
+  expiration: 3600
