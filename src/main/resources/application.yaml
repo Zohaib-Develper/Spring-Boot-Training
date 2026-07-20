@@ -7,6 +7,9 @@ spring:
   security:
     oauth2:
       client:
+        provider:
+          github:
+            user-name-attribute: login
         registration:
           google:
             client-id: ${GOOGLE_CLIENT_ID}
@@ -15,6 +18,9 @@ spring:
               - email
               - profile
               - openid
+          github:
+            client-id: ${GITHUB_CLIENT_ID}
+            client-secret: ${GITHUB_CLIENT_SECRET}
   jpa:
     open-in-view: false
     hibernate:

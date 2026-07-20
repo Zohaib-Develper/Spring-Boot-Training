@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -46,15 +47,22 @@ public class ApiSecurityConfiguration {
                 )
                 .oauth2Login(oauth2 -> oauth2
                         .successHandler((request, response, authentication) -> {
-                            OAuth2User principal = (OAuth2User) authentication.getPrincipal();
-                            String email = principal.getAttribute("email");
+                            String registerationId = ((OAuth2AuthenticationToken) authentication).getAuthorizedClientRegistrationId();
+                            String username = "";
+                            if (registerationId.equals("github")) {
+                                username = authentication.getName();
+                            }
+                            else if (registerationId.equals("google")) {
+                                OAuth2User principal = (OAuth2User) authentication.getPrincipal();
+                                username = principal.getAttribute("email");
 
-                            if (email == null) {
-                                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email not provided by provider");
-                                return;
+                                if (username == null) {
+                                    response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Email not provided by provider");
+                                    return;
+                                }
                             }
 
-                            ApiUser user = userService.findOrCreateByEmail(email);
+                            ApiUser user = userService.findOrCreateByEmail(username);
                             String token = jwtService.generateToken(user);
                             response.setContentType("application/json");
                             response.getWriter().write("{\"access_token\":" + "\"" + token + "\"}");
