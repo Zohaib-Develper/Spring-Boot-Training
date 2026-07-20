@@ -26,7 +26,7 @@ public class ApiSecurityConfiguration {
                         .requestMatchers(HttpMethod.POST, "/api/v1/news").hasAnyRole("EDITOR", "REPORTER")
                         .requestMatchers(HttpMethod.PUT, "/api/v1/news/*").hasAnyRole("EDITOR", "REPORTER")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/news/*").hasAnyRole("EDITOR")
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .formLogin(config -> {
                     config.successHandler((request, response, auth) -> {
                         ApiUser user = userService.findByUsername(auth.getName());

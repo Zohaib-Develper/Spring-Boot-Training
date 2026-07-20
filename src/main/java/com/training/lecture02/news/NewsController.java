@@ -1,5 +1,8 @@
 package com.training.lecture02.news;
 
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
@@ -11,6 +14,13 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/news")
+@SecurityScheme(
+        name = "bearerAuth",
+        type = SecuritySchemeType.HTTP,
+        scheme = "bearer",
+        bearerFormat = "JWT"
+)
+@SecurityRequirement(name = "bearerAuth")
 public class NewsController {
 
     private final NewsService newsService;
