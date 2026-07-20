@@ -34,21 +34,6 @@ public class ApiUserService implements UserDetailsService {
                 .build();
     }
 
-    public String generateToken(String username) {
-        ApiUser user = apiUserRepository.findByUsername(username).get();
-        user.setToken(UUID.randomUUID().toString());
-        apiUserRepository.save(user);
-        return user.getToken();
-    }
-
-    public ApiUser findByToken(String token) {
-        Optional<ApiUser> user = apiUserRepository.findByToken(token);
-        if(user.isEmpty()) {
-            throw new OAuth2AuthenticationException("Invalid");
-        }
-        return user.get();
-    }
-
     @Transactional
     public ApiUser findOrCreateByEmail(String email) {
         return apiUserRepository.findByUsername(email)

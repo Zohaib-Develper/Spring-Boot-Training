@@ -55,10 +55,9 @@ public class ApiSecurityConfiguration {
                             }
 
                             ApiUser user = userService.findOrCreateByEmail(email);
-                            String token = userService.generateToken(user.getUsername());
-
+                            String token = jwtService.generateToken(user);
                             response.setContentType("application/json");
-                            response.getWriter().write("{\"access_token\":\"" + token + "\"}");
+                            response.getWriter().write("{\"access_token\":" + "\"" + token + "\"}");
                         })
                 );
         return http.build();
