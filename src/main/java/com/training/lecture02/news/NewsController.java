@@ -47,21 +47,21 @@ public class NewsController {
         return ResponseEntity.ok(newsService.findOne(newsId));
     }
 
-    @PreAuthorize("hasAnyRole('EDITOR','REPORTER')")
+    @PreAuthorize("hasAnyAuthority('EDITOR','REPORTER')")
     @PostMapping
     public ResponseEntity<News> create(@RequestHeader(name = "X-XSRF-TOKEN", required = false) String csrf,
                                        @Valid @RequestBody News news) {
         return ResponseEntity.status(HttpStatus.CREATED).body(newsService.create(news));
     }
 
-    @PreAuthorize("hasAnyRole('EDITOR','REPORTER')")
+    @PreAuthorize("hasAnyAuthority('EDITOR','REPORTER')")
     @PutMapping("/{newsId}")
     public ResponseEntity<News> update(@RequestHeader(name = "X-XSRF-TOKEN", required = false) String csrf,
                                        @PathVariable int newsId, @Valid @RequestBody News news) {
         return ResponseEntity.ok(newsService.update(newsId, news));
     }
 
-    @PreAuthorize("hasAnyRole('EDITOR')")
+    @PreAuthorize("hasAnyAuthority('EDITOR')")
     @DeleteMapping("/{newsId}")
     public ResponseEntity<Void> delete(@RequestHeader(name = "X-XSRF-TOKEN", required = false) String csrf,
                                        @PathVariable int newsId) {
