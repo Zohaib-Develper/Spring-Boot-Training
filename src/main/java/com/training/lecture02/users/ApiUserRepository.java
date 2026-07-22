@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ApiUserRepository extends JpaRepository<ApiUser, Long> {
 
-  public Optional<ApiUser> findByUsername(String username);
+  Optional<ApiUser> findByUsername(String username);
 }
