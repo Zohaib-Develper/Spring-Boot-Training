@@ -10,6 +10,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.stereotype.Service;
 
+import com.training.lecture02.security.Role;
+
 import java.util.Optional;
 import java.util.UUID;
 
@@ -41,7 +43,7 @@ public class ApiUserService implements UserDetailsService {
                     try {
                         ApiUser newUser = new ApiUser();
                         newUser.setUsername(email);
-                        newUser.setUserRoles("EDITOR");
+                        newUser.setUserRoles(Role.EDITOR.name());
                         return apiUserRepository.save(newUser);
                     } catch (DataIntegrityViolationException e) {
                         return apiUserRepository.findByUsername(email)

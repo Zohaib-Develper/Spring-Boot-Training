@@ -8,6 +8,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -50,15 +51,17 @@ public class NewsController {
     @PreAuthorize("hasAnyAuthority('EDITOR','REPORTER')")
     @PostMapping
     public ResponseEntity<News> create(@RequestHeader(name = "X-XSRF-TOKEN", required = false) String csrf,
-                                       @Valid @RequestBody News news) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(newsService.create(news));
+                                       @Valid @RequestBody News news,
+                                       Authentication auth) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(newsService.create(news, auth));
     }
 
     @PreAuthorize("hasAnyAuthority('EDITOR','REPORTER')")
     @PutMapping("/{newsId}")
     public ResponseEntity<News> update(@RequestHeader(name = "X-XSRF-TOKEN", required = false) String csrf,
-                                       @PathVariable int newsId, @Valid @RequestBody News news) {
-        return ResponseEntity.ok(newsService.update(newsId, news));
+                                       @PathVariable int newsId, @Valid @RequestBody News news,
+                                       Authentication auth) {
+        return ResponseEntity.ok(newsService.update(newsId, news, auth));
     }
 
     @PreAuthorize("hasAnyAuthority('EDITOR')")

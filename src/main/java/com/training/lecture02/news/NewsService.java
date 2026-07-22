@@ -7,13 +7,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import com.training.lecture02.security.Role;
 
 @Service
 public class NewsService {
 
-    private static final String ROLE_EDITOR = "EDITOR";
     private static final int MAX_PAGE_SIZE = 100;
     private static final int DEFAULT_PAGE_SIZE = 10;
 
@@ -34,19 +34,17 @@ public class NewsService {
                 .orElseThrow(() -> new NewsNotFoundException(newsId));
     }
 
-    public News create(News news) {
-        Authentication auth = currentAuth();
+    public News create(News news, Authentication auth) {
         news.setReportedBy(auth.getName());
         news.setReportedAt(LocalDateTime.now());
         return newsRepository.save(news);
     }
 
-    public News update(int newsId, News news) {
-        Authentication auth = currentAuth();
+    public News update(int newsId, News news, Authentication auth) {
         News existing = newsRepository.findById(newsId)
                 .orElseThrow(() -> new NewsNotFoundException(newsId));
 
-        if (!isOwner(auth, existing) && !hasRole(auth, ROLE_EDITOR)) {
+        if (!isOwner(auth, existing) && !hasRole(auth, Role.EDITOR)) {
             throw new NewsAccessDeniedException(newsId);
         }
 
@@ -63,16 +61,12 @@ public class NewsService {
         newsRepository.deleteById(newsId);
     }
 
-    private Authentication currentAuth() {
-        return SecurityContextHolder.getContext().getAuthentication();
-    }
-
     private boolean isOwner(Authentication auth, News news) {
         return auth.getName().equals(news.getReportedBy());
     }
 
-    private boolean hasRole(Authentication auth, String role) {
-        String target = "ROLE_" + role;
+    private boolean hasRole(Authentication auth, Role role) {
+        String target = "ROLE_" + role.name();
         return auth.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .anyMatch(authority -> authority.equals(target));
