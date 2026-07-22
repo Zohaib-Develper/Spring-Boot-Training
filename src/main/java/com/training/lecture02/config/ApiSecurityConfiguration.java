@@ -32,7 +32,7 @@ public class ApiSecurityConfiguration {
                 .sessionManagement(config -> config.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .oauth2ResourceServer(oauth ->
                         oauth.opaqueToken(config -> config.introspector(
-                                jwtService::verify
+                                jwtService::introspector
                         ))
                 )
                 .oauth2Login(oauth2 -> oauth2

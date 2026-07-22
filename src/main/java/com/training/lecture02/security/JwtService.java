@@ -28,7 +28,7 @@ public class JwtService {
         return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, jwtClaimsSet)).getTokenValue();
     }
 
-    public DefaultOAuth2AuthenticatedPrincipal verify(String token) {
+    public DefaultOAuth2AuthenticatedPrincipal introspector(String token) {
         Jwt jwt = jwtDecoder.decode(token);
         String username = jwt.getSubject();
         String roles = jwt.getClaim("role");
