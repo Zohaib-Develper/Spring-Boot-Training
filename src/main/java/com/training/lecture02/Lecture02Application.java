@@ -9,8 +9,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableAdminServer
 public class Lecture02Application {
 
-	public static void main(String[] args) {
-		SpringApplication.run(Lecture02Application.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(Lecture02Application.class, args);
+  }
 
 }
