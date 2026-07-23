@@ -1,10 +1,12 @@
 package com.training.lecture02.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.training.lecture02.users.ApiUser;
 import com.training.lecture02.users.ApiUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -26,6 +28,6 @@ public class FormLoginSuccessHandler implements AuthenticationSuccessHandler {
     ApiUser user = apiUserService.findByUsername(authentication.getName());
     String token = jwtService.generateToken(user);
     response.setContentType("application/json");
-    response.getWriter().write("{\"access_token\":\"" + token + "\"}");
+    new ObjectMapper().writeValue(response.getWriter(), Map.of("access_token", token));
   }
 }

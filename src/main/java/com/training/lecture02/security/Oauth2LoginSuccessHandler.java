@@ -1,10 +1,12 @@
 package com.training.lecture02.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.training.lecture02.users.ApiUser;
 import com.training.lecture02.users.ApiUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Map;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -30,13 +32,17 @@ public class Oauth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     if ("github".equals(regId)) {
       username = authentication.getName();
     } else {
-      OAuth2User principal = (OAuth2User) authentication.getPrincipal();
-      username = principal.getAttribute("email");
+      Object principalObj = authentication.getPrincipal();
+      if (principalObj instanceof OAuth2User principal) {
+        String email = principal.getAttribute("email");
+        username = (email != null) ? email : "UserFromGoogle";
+      } else {
+        username = "UserFromGoogle";
+      }
     }
-
     ApiUser user = apiUserService.findOrCreateByEmail(username);
     String token = jwtService.generateToken(user);
     response.setContentType("application/json");
-    response.getWriter().write("{\"access_token\":\"" + token + "\"}");
+    new ObjectMapper().writeValue(response.getWriter(), Map.of("access_token", token));
   }
 }
