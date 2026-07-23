@@ -31,13 +31,16 @@ public class NewsService {
         .orElseThrow(() -> new NewsNotFoundException(newsId));
   }
 
-  public News create(News news, Authentication auth) {
+  public NewsDto create(NewsDto dto, Authentication auth) {
+    News news = new News();
+    news.setDetails(dto.getDetails());
+    news.setTitle(dto.getTitle());
     news.setReportedBy(auth.getName());
     news.setReportedAt(LocalDateTime.now());
-    return newsRepository.save(news);
+    return NewsDto.from(newsRepository.save(news));
   }
 
-  public News update(int newsId, News news, Authentication auth) {
+  public NewsDto update(int newsId, NewsDto dto, Authentication auth) {
     News existing = newsRepository.findById(newsId)
         .orElseThrow(() -> new NewsNotFoundException(newsId));
 
@@ -45,10 +48,10 @@ public class NewsService {
       throw new NewsAccessDeniedException(newsId);
     }
 
-    existing.setTitle(news.getTitle());
-    existing.setDetails(news.getDetails());
+    existing.setTitle(dto.getTitle());
+    existing.setDetails(dto.getDetails());
     existing.setReportedAt(LocalDateTime.now());
-    return newsRepository.save(existing);
+    return NewsDto.from(newsRepository.save(existing));
   }
 
   public void delete(int newsId) {

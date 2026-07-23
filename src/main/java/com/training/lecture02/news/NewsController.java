@@ -53,26 +53,26 @@ public class NewsController {
 
   @PreAuthorize("permitAll()")
   @GetMapping("/{newsId}")
-  public ResponseEntity<News> findOne(@PathVariable int newsId) {
-    return ResponseEntity.ok(newsService.findOne(newsId));
+  public ResponseEntity<NewsDto> findOne(@PathVariable int newsId) {
+    return ResponseEntity.ok(NewsDto.from(newsService.findOne(newsId)));
   }
 
   @PreAuthorize("hasAnyAuthority('EDITOR','REPORTER')")
   @PostMapping
-  public ResponseEntity<News> create(
+  public ResponseEntity<NewsDto> create(
       @RequestHeader(name = "X-XSRF-TOKEN", required = false) String csrf,
-      @Valid @RequestBody News news,
+      @Valid @RequestBody NewsDto dto,
       Authentication auth) {
-    return ResponseEntity.status(HttpStatus.CREATED).body(newsService.create(news, auth));
+    return ResponseEntity.status(HttpStatus.CREATED).body(newsService.create(dto, auth));
   }
 
   @PreAuthorize("hasAnyAuthority('EDITOR','REPORTER')")
   @PutMapping("/{newsId}")
-  public ResponseEntity<News> update(
+  public ResponseEntity<NewsDto> update(
       @RequestHeader(name = "X-XSRF-TOKEN", required = false) String csrf,
-      @PathVariable int newsId, @Valid @RequestBody News news,
+      @PathVariable int newsId, @Valid @RequestBody NewsDto dto,
       Authentication auth) {
-    return ResponseEntity.ok(newsService.update(newsId, news, auth));
+    return ResponseEntity.ok(newsService.update(newsId, dto, auth));
   }
 
   @PreAuthorize("hasAnyAuthority('EDITOR')")
