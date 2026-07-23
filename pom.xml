@@ -111,8 +111,7 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
-    </dependency>
-    <dependency>
+    </dependency>    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
@@ -302,6 +301,44 @@
             </goals>
           </execution>
         </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.pitest</groupId>
+        <artifactId>pitest-maven</artifactId>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>mutationCoverage</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <targetClasses>
+            <param>com.training.lecture02.*</param>
+          </targetClasses>
+          <targetTests>
+            <param>com.training.lecture02.*</param>
+          </targetTests>
+          <excludedClasses>
+            <param>com.training.lecture02.config.*</param>
+          </excludedClasses>
+          <outputFormats>
+            <outputFormat>HTML</outputFormat>
+          </outputFormats>
+          <mutationThreshold>60</mutationThreshold>
+          <withHistory>false</withHistory>
+          <failWhenNoMutations>false</failWhenNoMutations>
+        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-junit5-plugin</artifactId>
+            <version>1.2.3</version>
+          </dependency>
+        </dependencies>
       </plugin>
     </plugins>
   </build>

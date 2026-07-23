@@ -62,6 +62,23 @@ public class NewsIntegrationTest {
   }
 
   @Test
+  void getAllNews_shouldHandleInvalidPagination() throws Exception {
+    mockMvc.perform(get("/api/v1/news")
+            .param("page", "-1")
+            .param("size", "0"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").value(0))
+        .andExpect(jsonPath("$.size").value(10));
+
+    mockMvc.perform(get("/api/v1/news")
+            .param("page", "0")
+            .param("size", "100"))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.page").value(0))
+        .andExpect(jsonPath("$.size").value(100));
+  }
+
+  @Test
   void getNewsById_shouldReturnSingleNews() throws Exception {
     mockMvc.perform(get("/api/v1/news/2"))
         .andDo(MockMvcResultHandlers.print())
