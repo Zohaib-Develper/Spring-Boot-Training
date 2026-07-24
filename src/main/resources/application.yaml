@@ -27,14 +27,19 @@ spring:
       ddl-auto: none
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+  ai:
+    google:
+      genai:
+        api-key: ${GEMINI_API_KEY}
+        chat:
+          options:
+            model: gemini-3.5-flash-lite
 logging:
   level:
     sql: debug
     web: debug
-#    liquibase: debug
-#    org.springframework.security: debug
-
-
+  #    liquibase: debug
+  #    org.springframework.security: debug
 management:
   endpoints:
     web:
@@ -63,7 +68,6 @@ management:
         enabled: false
 initial:
   message: Hello from application.yaml
-
 jwt:
   private-key: ${JWT_PRIVATE_KEY}
   public-key: ${JWT_PUBLIC_KEY}
