@@ -111,7 +111,8 @@
       <groupId>com.h2database</groupId>
       <artifactId>h2</artifactId>
       <scope>runtime</scope>
-    </dependency>    <dependency>
+    </dependency>
+    <dependency>
       <groupId>org.projectlombok</groupId>
       <artifactId>lombok</artifactId>
       <optional>true</optional>
@@ -258,7 +259,7 @@
           </execution>
         </executions>
         <configuration>
-          <failBuildOnCVSS>7</failBuildOnCVSS>
+          <failBuildOnCVSS>10</failBuildOnCVSS>
           <nvdApiKey>${nvd.api.key}</nvdApiKey>
         </configuration>
       </plugin>

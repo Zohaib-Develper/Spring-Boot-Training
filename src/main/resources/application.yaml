@@ -67,3 +67,6 @@ initial:
 jwt:
   private-key: ${JWT_PRIVATE_KEY}
   public-key: ${JWT_PUBLIC_KEY}
+nvd:
+  api:
+    key: 89394BBE-5E86-F111-8370-129478FCB64D
