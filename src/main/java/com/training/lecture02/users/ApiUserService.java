@@ -3,6 +3,7 @@ package com.training.lecture02.users;
 import com.training.lecture02.security.Role;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -47,6 +48,7 @@ public class ApiUserService implements UserDetailsService {
         });
   }
 
+  @Cacheable(value = "users", key = "#username")
   public ApiUser findByUsername(String username) {
     return apiUserRepository.findByUsername(username).get();
   }
