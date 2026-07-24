@@ -2,13 +2,16 @@ package com.training.lecture02.news;
 
 import com.training.lecture02.security.Role;
 import java.time.LocalDateTime;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Service;
 
 @Service
+@Slf4j
 public class NewsService {
 
   private static final int MAX_PAGE_SIZE = 100;
@@ -59,6 +62,13 @@ public class NewsService {
       throw new NewsNotFoundException(newsId);
     }
     newsRepository.deleteById(newsId);
+  }
+
+  @Async
+  void report() {
+    for (News news : newsRepository.findAll()) {
+      log.info("Title: " + news.getTitle());
+    }
   }
 
   private boolean isOwner(Authentication auth, News news) {

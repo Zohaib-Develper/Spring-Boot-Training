@@ -83,4 +83,10 @@ public class NewsController {
     newsService.delete(newsId);
     return ResponseEntity.noContent().build();
   }
+
+  @GetMapping("/report")
+  public ResponseEntity<String> generateReport() {
+    newsService.report();
+    return ResponseEntity.ok("Reports Generated Successfully");
+  }
 }
