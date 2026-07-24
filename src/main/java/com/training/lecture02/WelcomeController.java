@@ -16,6 +16,6 @@ public class WelcomeController {
 
   @GetMapping("/api/v1/welcome")
   public String welcome() {
-    return message;
+    return "Hello from controller";
   }
 }

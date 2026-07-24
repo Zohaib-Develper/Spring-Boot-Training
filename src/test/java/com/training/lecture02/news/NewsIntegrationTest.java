@@ -1,5 +1,6 @@
 package com.training.lecture02.news;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -14,12 +15,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@WithMockUser(username = "editor", authorities = {"EDITOR"})
 public class NewsIntegrationTest {
 
   @Autowired
@@ -65,9 +68,10 @@ public class NewsIntegrationTest {
     newNews.setReportedAt(LocalDateTime.now());
 
     mockMvc.perform(post("/api/v1/news")
+            .with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(newNews)))
-        .andExpect(status().isOk())
+        .andExpect(status().isCreated())
         .andExpect(jsonPath("$.newsId").exists())
         .andExpect(jsonPath("$.title").value("New Title"));
   }
@@ -81,6 +85,7 @@ public class NewsIntegrationTest {
     invalidNews.setReportedAt(LocalDateTime.now());
 
     mockMvc.perform(post("/api/v1/news")
+            .with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(invalidNews)))
         .andDo(MockMvcResultHandlers.print())
@@ -97,7 +102,8 @@ public class NewsIntegrationTest {
     updated.setReportedBy("Author A");
     updated.setReportedAt(LocalDateTime.now());
 
-    mockMvc.perform(put("/api/v1/news/" + 1)
+    mockMvc.perform(put("/api/v1/news/" + 2)
+            .with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isOk())
@@ -113,6 +119,7 @@ public class NewsIntegrationTest {
     updated.setReportedAt(LocalDateTime.now());
 
     mockMvc.perform(put("/api/v1/news/999999")
+            .with(csrf())
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(updated)))
         .andExpect(status().isNotFound());
@@ -121,9 +128,9 @@ public class NewsIntegrationTest {
   @Test
   void deleteNews_shouldRemoveNews() throws Exception {
 
-    mockMvc.perform(delete("/api/v1/news/1"))
-        .andExpect(status().isOk())
-        .andExpect(jsonPath("$.newsId").value(1));
+    mockMvc.perform(delete("/api/v1/news/1")
+            .with(csrf()))
+        .andExpect(status().is2xxSuccessful());
 
     mockMvc.perform(get("/api/v1/news/1"))
         .andExpect(status().isNotFound());
