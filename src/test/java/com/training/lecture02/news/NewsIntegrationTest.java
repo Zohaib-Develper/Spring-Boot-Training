@@ -8,9 +8,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.time.LocalDateTime;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -19,20 +16,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import tools.jackson.databind.ObjectMapper;
 
-@SpringBootTest(
-    properties = {
-        "spring.security.oauth2.client.registration.google.client-id=dummy",
-        "spring.security.oauth2.client.registration.google.client-secret=dummy",
-        "spring.security.oauth2.client.registration.github.client-id=dummy",
-        "spring.security.oauth2.client.registration.github.client-secret=dummy"
-    }
-)
+@SpringBootTest
 @AutoConfigureMockMvc
 public class NewsIntegrationTest {
 
@@ -42,13 +30,6 @@ public class NewsIntegrationTest {
   @Autowired
   private ObjectMapper objectMapper;
 
-  @DynamicPropertySource
-  static void jwtProperties(DynamicPropertyRegistry registry) throws IOException {
-    String privateKey = Files.readString(Path.of("src/test/resources/private_key.pem"));
-    String publicKey = Files.readString(Path.of("src/test/resources/public_key.pem"));
-    registry.add("jwt.private-key", () -> privateKey);
-    registry.add("jwt.public-key", () -> publicKey);
-  }
 
   @Test
   void getAllNews_shouldReturnSeedsNews() throws Exception {
