@@ -10,9 +10,9 @@
     <relativePath/> <!-- lookup parent from repository -->
   </parent>
   <groupId>com.training</groupId>
-  <artifactId>lecture02</artifactId>
+  <artifactId>news-api</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name/>
+  <name>news-api</name>
   <description/>
   <url/>
   <licenses>
@@ -337,13 +337,13 @@
         </executions>
         <configuration>
           <targetClasses>
-            <param>com.training.lecture02.*</param>
+            <param>com.training.newsapi.*</param>
           </targetClasses>
           <targetTests>
-            <param>com.training.lecture02.*</param>
+            <param>com.training.newsapi.*</param>
           </targetTests>
           <excludedClasses>
-            <param>com.training.lecture02.config.*</param>
+            <param>com.training.newsapi.config.*</param>
           </excludedClasses>
           <outputFormats>
             <outputFormat>HTML</outputFormat>

@@ -1,6 +1,6 @@
 spring:
   application:
-    name: lecture02
+    name: news-api
   boot:
     admin:
       context-path: /admin
