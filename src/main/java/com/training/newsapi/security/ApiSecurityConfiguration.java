@@ -9,7 +9,6 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
 
-
 @Configuration
 @EnableMethodSecurity
 public class ApiSecurityConfiguration {
@@ -19,7 +18,13 @@ public class ApiSecurityConfiguration {
       FormLoginSuccessHandler formLoginSuccessHandler,
       Oauth2LoginSuccessHandler oauth2LoginSuccessHandler) {
     http.authorizeHttpRequests(config -> config
-            .anyRequest().permitAll())
+            .requestMatchers(
+                "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/v3/api-docs/**",
+                "/swagger-resources/**"
+            ).permitAll()
+            .anyRequest().authenticated())
         .formLogin(config -> config.successHandler(formLoginSuccessHandler))
         .csrf(config ->
             config.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
