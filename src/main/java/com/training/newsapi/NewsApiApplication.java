@@ -2,6 +2,7 @@ package com.training.newsapi;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import java.util.Locale;
 import java.util.TimeZone;
@@ -23,6 +24,7 @@ import org.springframework.scheduling.annotation.EnableScheduling;
     scheme = "bearer",
     bearerFormat = "JWT"
 )
+@SecurityRequirement(name = "bearerAuth")
 public class NewsApiApplication {
 
   static {

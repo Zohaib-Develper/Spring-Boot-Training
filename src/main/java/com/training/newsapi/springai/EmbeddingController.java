@@ -11,10 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/**
- * REST controller for managing document embeddings.
- * Use Swagger UI to ingest content and verify stored embeddings.
- */
 @RestController
 @RequestMapping("/api/v1/ai/embeddings")
 public class EmbeddingController {
@@ -25,27 +21,12 @@ public class EmbeddingController {
     this.embeddingService = embeddingService;
   }
 
-  /**
-   * Ingest a single document — generates its embedding and stores it.
-   */
   @PostMapping
-  public Map<String, String> addDocument(@Valid @RequestBody EmbeddingRequest request) {
-    String documentId = embeddingService.addDocument(request.content(), request.metadata());
+  public Map<String, String> addDocument(@Valid @RequestBody EmbeddingDTO dto) {
+    String documentId = embeddingService.addDocument(dto.getContent(), dto.getMetadata());
     return Map.of("documentId", documentId, "status", "embedded");
   }
 
-  /**
-   * Ingest multiple documents in a single batch.
-   */
-  @PostMapping("/batch")
-  public Map<String, Object> addDocuments(@Valid @RequestBody List<EmbeddingRequest> requests) {
-    List<String> documentIds = embeddingService.addDocuments(requests);
-    return Map.of("documentIds", documentIds, "count", documentIds.size(), "status", "embedded");
-  }
-
-  /**
-   * Search for similar documents — useful for debugging/testing.
-   */
   @GetMapping("/search")
   public List<Document> searchDocuments(
       @RequestParam String query,
