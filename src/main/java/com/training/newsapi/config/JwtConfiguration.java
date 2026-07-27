@@ -1,8 +1,10 @@
 package com.training.newsapi.config;
 
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
@@ -31,27 +33,27 @@ public class JwtConfiguration {
   }
 
   @Bean
-  JwtEncoder jwtEncoder() throws Exception {
+  JwtEncoder jwtEncoder() throws NoSuchAlgorithmException, InvalidKeySpecException {
     return NimbusJwtEncoder.withKeyPair(rsaPublicKey(), rsaPrivateKey())
         .algorithm(this.signatureAlgorithm)
         .build();
   }
 
   @Bean
-  JwtDecoder jwtDecoder() throws Exception {
+  JwtDecoder jwtDecoder() throws NoSuchAlgorithmException, InvalidKeySpecException {
     return NimbusJwtDecoder.withPublicKey(rsaPublicKey())
         .signatureAlgorithm(this.signatureAlgorithm)
         .build();
   }
 
-  private RSAPrivateKey rsaPrivateKey() throws Exception {
+  private RSAPrivateKey rsaPrivateKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
     byte[] decoded = Base64.getDecoder().decode(stripPemHeaders(privateKeyBase64));
     PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decoded);
     KeyFactory kf = KeyFactory.getInstance("RSA");
     return (RSAPrivateKey) kf.generatePrivate(spec);
   }
 
-  private RSAPublicKey rsaPublicKey() throws Exception {
+  private RSAPublicKey rsaPublicKey() throws NoSuchAlgorithmException, InvalidKeySpecException {
     byte[] decoded = Base64.getDecoder().decode(stripPemHeaders(publicKeyBase64));
     X509EncodedKeySpec spec = new X509EncodedKeySpec(decoded);
     KeyFactory kf = KeyFactory.getInstance("RSA");
