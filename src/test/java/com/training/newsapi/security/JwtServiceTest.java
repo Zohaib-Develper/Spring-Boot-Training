@@ -8,7 +8,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.training.newsapi.users.ApiUser;
+import com.training.newsapi.user.ApiUser;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package com.training.newsapi.users;
+package com.training.newsapi.user;
 
 import java.util.List;
 import org.springframework.scheduling.annotation.Scheduled;

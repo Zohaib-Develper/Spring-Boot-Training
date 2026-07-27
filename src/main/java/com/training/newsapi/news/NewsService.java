@@ -1,5 +1,7 @@
 package com.training.newsapi.news;
 
+import com.training.newsapi.news.exception.NewsAccessDeniedException;
+import com.training.newsapi.news.exception.NewsNotFoundException;
 import com.training.newsapi.security.Role;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;

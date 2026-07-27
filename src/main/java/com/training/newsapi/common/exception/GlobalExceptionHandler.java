@@ -1,4 +1,4 @@
-package com.training.newsapi.news;
+package com.training.newsapi.common.exception;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -15,8 +15,8 @@ import jakarta.validation.ConstraintViolationException;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-  @ExceptionHandler(NewsNotFoundException.class)
-  public ResponseEntity<Map<String, Object>> handleNewsNotFound(NewsNotFoundException ex) {
+  @ExceptionHandler(ResourceNotFoundException.class)
+  public ResponseEntity<Map<String, Object>> handleResourceNotFound(ResourceNotFoundException ex) {
     Map<String, Object> body = new HashMap<>();
     body.put("timestamp", LocalDateTime.now());
     body.put("status", HttpStatus.NOT_FOUND.value());
@@ -25,8 +25,8 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(HttpStatus.NOT_FOUND).body(body);
   }
 
-  @ExceptionHandler(NewsAccessDeniedException.class)
-  public ResponseEntity<Map<String, Object>> handleNewsAccessDenied(NewsAccessDeniedException ex) {
+  @ExceptionHandler(UnauthorizedException.class)
+  public ResponseEntity<Map<String, Object>> handleUnauthorized(UnauthorizedException ex) {
     Map<String, Object> body = new HashMap<>();
     body.put("timestamp", LocalDateTime.now());
     body.put("status", HttpStatus.FORBIDDEN.value());

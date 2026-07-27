@@ -1,4 +1,4 @@
-package com.training.newsapi.users;
+package com.training.newsapi.user;
 
 import com.training.newsapi.security.Role;
 import jakarta.transaction.Transactional;

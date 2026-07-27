@@ -9,8 +9,8 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import com.training.newsapi.users.ApiUser;
-import com.training.newsapi.users.ApiUserService;
+import com.training.newsapi.user.ApiUser;
+import com.training.newsapi.user.ApiUserService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

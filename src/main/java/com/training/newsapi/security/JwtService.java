@@ -1,6 +1,6 @@
 package com.training.newsapi.security;
 
-import com.training.newsapi.users.ApiUser;
+import com.training.newsapi.user.ApiUser;
 import java.time.Instant;
 import java.util.Map;
 import lombok.AllArgsConstructor;

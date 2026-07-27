@@ -1,4 +1,4 @@
-package com.training.newsapi.users;
+package com.training.newsapi.user;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

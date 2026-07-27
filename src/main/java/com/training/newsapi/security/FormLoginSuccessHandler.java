@@ -1,8 +1,8 @@
 package com.training.newsapi.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.training.newsapi.users.ApiUser;
-import com.training.newsapi.users.ApiUserService;
+import com.training.newsapi.user.ApiUser;
+import com.training.newsapi.user.ApiUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;

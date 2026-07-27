@@ -1,17 +1,19 @@
-package com.training.newsapi;
+package com.training.newsapi.springai;
 
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-public class ChatController {
+@RequestMapping("/api/v1/ai")
+public class AiChatController {
 
   private final ChatClient chatClient;
 
-  public ChatController(ChatClient chatClient) {
+  public AiChatController(ChatClient chatClient) {
     this.chatClient = chatClient;
   }
 
