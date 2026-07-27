@@ -1,6 +1,8 @@
 package com.training.newsapi;
 
 import de.codecentric.boot.admin.server.config.EnableAdminServer;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import java.util.Locale;
 import java.util.TimeZone;
 import org.springframework.boot.SpringApplication;
@@ -15,6 +17,12 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableCaching
 @EnableAsync
 @EnableScheduling
+@SecurityScheme(
+    name = "bearerAuth",
+    type = SecuritySchemeType.HTTP,
+    scheme = "bearer",
+    bearerFormat = "JWT"
+)
 public class NewsApiApplication {
 
   static {

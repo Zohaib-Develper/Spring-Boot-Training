@@ -1,8 +1,5 @@
 package com.training.newsapi.news;
 
-import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import jakarta.validation.Valid;
 import java.util.Map;
 import org.springframework.data.domain.Page;
@@ -23,13 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1/news")
-@SecurityScheme(
-    name = "bearerAuth",
-    type = SecuritySchemeType.HTTP,
-    scheme = "bearer",
-    bearerFormat = "JWT"
-)
-@SecurityRequirement(name = "bearerAuth")
 public class NewsController {
 
   private final NewsService newsService;
@@ -84,6 +74,7 @@ public class NewsController {
     return ResponseEntity.noContent().build();
   }
 
+  @PreAuthorize("hasAnyAuthority('EDITOR')")
   @GetMapping("/report")
   public ResponseEntity<String> generateReport() {
     newsService.report();

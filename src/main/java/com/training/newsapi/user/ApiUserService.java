@@ -1,6 +1,5 @@
 package com.training.newsapi.user;
 
-import com.training.newsapi.security.Role;
 import jakarta.transaction.Transactional;
 import java.util.Optional;
 import org.springframework.cache.annotation.Cacheable;
@@ -50,6 +49,7 @@ public class ApiUserService implements UserDetailsService {
 
   @Cacheable(value = "users", key = "#username")
   public ApiUser findByUsername(String username) {
-    return apiUserRepository.findByUsername(username).get();
+    return apiUserRepository.findByUsername(username)
+        .orElseThrow(() -> new UsernameNotFoundException("User not found: " + username));
   }
 }

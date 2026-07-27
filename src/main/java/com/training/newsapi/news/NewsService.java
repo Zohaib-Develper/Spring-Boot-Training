@@ -2,7 +2,7 @@ package com.training.newsapi.news;
 
 import com.training.newsapi.news.exception.NewsAccessDeniedException;
 import com.training.newsapi.news.exception.NewsNotFoundException;
-import com.training.newsapi.security.Role;
+import com.training.newsapi.user.Role;
 import java.time.LocalDateTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -67,7 +67,7 @@ public class NewsService {
   }
 
   @Async
-  void report() {
+  public void report() {
     for (News news : newsRepository.findAll()) {
       log.info("Title: " + news.getTitle());
     }

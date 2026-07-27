@@ -1,4 +1,4 @@
-package com.training.newsapi.security;
+package com.training.newsapi.user;
 
 public enum Role {
   EDITOR,
