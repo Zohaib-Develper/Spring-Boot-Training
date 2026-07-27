@@ -73,8 +73,7 @@ public class NewsController {
     newsService.delete(newsId);
     return ResponseEntity.noContent().build();
   }
-
-  @PreAuthorize("hasAnyAuthority('EDITOR')")
+  
   @GetMapping("/report")
   public ResponseEntity<String> generateReport() {
     newsService.report();

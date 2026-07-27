@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class NewsIntegrationTest {
+class NewsIntegrationTest {
 
   @Autowired
   private MockMvc mockMvc;
@@ -83,7 +84,7 @@ public class NewsIntegrationTest {
     newNews.setTitle("New Title");
     newNews.setDetails("New Details");
     newNews.setReportedBy("Author B");
-    newNews.setReportedAt(LocalDateTime.now());
+    newNews.setReportedAt(LocalDateTime.now(ZoneOffset.UTC));
 
     mockMvc.perform(post("/api/v1/news")
             .with(csrf())
@@ -101,7 +102,7 @@ public class NewsIntegrationTest {
     invalidNews.setTitle("");
     invalidNews.setDetails("Details");
     invalidNews.setReportedBy("Author B");
-    invalidNews.setReportedAt(LocalDateTime.now());
+    invalidNews.setReportedAt(LocalDateTime.now(ZoneOffset.UTC));
 
     mockMvc.perform(post("/api/v1/news")
             .with(csrf())

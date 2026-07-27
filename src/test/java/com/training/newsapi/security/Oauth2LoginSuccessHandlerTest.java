@@ -1,17 +1,12 @@
 package com.training.newsapi.security;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.training.newsapi.user.ApiUser;
 import com.training.newsapi.user.ApiUserService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -20,7 +15,6 @@ import java.io.StringWriter;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -28,7 +22,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 class Oauth2LoginSuccessHandlerTest {
 
   @Test
-  void onAuthenticationSuccess_github_shouldUseAuthenticationName() throws IOException, ServletException {
+  void onAuthenticationSuccess_github_shouldUseAuthenticationName() throws IOException {
     ApiUserService apiUserService = mock(ApiUserService.class);
     JwtService jwtService = mock(JwtService.class);
     Oauth2LoginSuccessHandler handler = new Oauth2LoginSuccessHandler(apiUserService, jwtService);
@@ -56,7 +50,7 @@ class Oauth2LoginSuccessHandlerTest {
   }
 
   @Test
-  void onAuthenticationSuccess_googleWithEmail_shouldUseEmail() throws IOException, ServletException {
+  void onAuthenticationSuccess_googleWithEmail_shouldUseEmail() throws IOException {
     ApiUserService apiUserService = mock(ApiUserService.class);
     JwtService jwtService = mock(JwtService.class);
     Oauth2LoginSuccessHandler handler = new Oauth2LoginSuccessHandler(apiUserService, jwtService);
@@ -70,7 +64,8 @@ class Oauth2LoginSuccessHandlerTest {
 
     when(authentication.getAuthorizedClientRegistrationId()).thenReturn("google");
 
-    OAuth2User principal = new DefaultOAuth2User(List.of(), Map.of("email", "user@example.com"), "email");
+    OAuth2User principal = new DefaultOAuth2User(List.of(), Map.of("email", "user@example.com"),
+        "email");
     when(authentication.getPrincipal()).thenReturn(principal);
 
     ApiUser user = new ApiUser();
@@ -86,7 +81,7 @@ class Oauth2LoginSuccessHandlerTest {
   }
 
   @Test
-  void onAuthenticationSuccess_googleWithoutEmail_shouldUseDefault() throws IOException, ServletException {
+  void onAuthenticationSuccess_googleWithoutEmail_shouldUseDefault() throws IOException {
     ApiUserService apiUserService = mock(ApiUserService.class);
     JwtService jwtService = mock(JwtService.class);
     Oauth2LoginSuccessHandler handler = new Oauth2LoginSuccessHandler(apiUserService, jwtService);

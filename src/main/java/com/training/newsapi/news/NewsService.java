@@ -4,6 +4,7 @@ import com.training.newsapi.news.exception.NewsAccessDeniedException;
 import com.training.newsapi.news.exception.NewsNotFoundException;
 import com.training.newsapi.user.Role;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +42,7 @@ public class NewsService {
     news.setDetails(dto.getDetails());
     news.setTitle(dto.getTitle());
     news.setReportedBy(auth.getName());
-    news.setReportedAt(LocalDateTime.now());
+    news.setReportedAt(LocalDateTime.now(ZoneOffset.UTC));
     return NewsDto.from(newsRepository.save(news));
   }
 
@@ -55,7 +56,7 @@ public class NewsService {
 
     existing.setTitle(dto.getTitle());
     existing.setDetails(dto.getDetails());
-    existing.setReportedAt(LocalDateTime.now());
+    existing.setReportedAt(LocalDateTime.now(ZoneOffset.UTC));
     return NewsDto.from(newsRepository.save(existing));
   }
 

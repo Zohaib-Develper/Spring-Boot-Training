@@ -1,30 +1,24 @@
 package com.training.newsapi.security;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import com.training.newsapi.user.ApiUser;
 import com.training.newsapi.user.ApiUserService;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 class FormLoginSuccessHandlerTest {
 
   @Test
-  void onAuthenticationSuccess_shouldWriteJwtToken() throws IOException, ServletException {
+  void onAuthenticationSuccess_shouldWriteJwtToken() throws IOException {
     ApiUserService apiUserService = mock(ApiUserService.class);
     JwtService jwtService = mock(JwtService.class);
     FormLoginSuccessHandler handler = new FormLoginSuccessHandler(apiUserService, jwtService);

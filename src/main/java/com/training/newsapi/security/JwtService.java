@@ -1,6 +1,7 @@
 package com.training.newsapi.security;
 
 import com.training.newsapi.user.ApiUser;
+import java.time.Duration;
 import java.time.Instant;
 import java.util.Map;
 import lombok.AllArgsConstructor;
@@ -21,13 +22,14 @@ public class JwtService {
 
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
+  private static final Duration TOKEN_EXPIRATION = Duration.ofMinutes(5);
 
   public String generateToken(ApiUser user) {
     JwsHeader jwsHeader = JwsHeader.with(SignatureAlgorithm.PS256).build();
     JwtClaimsSet jwtClaimsSet = JwtClaimsSet.builder()
         .subject(user.getUsername())
         .claim("role", user.getUserRoles())
-        .expiresAt(Instant.now().plusSeconds(5 * 60))
+        .expiresAt(Instant.now().plus(TOKEN_EXPIRATION))
         .build();
     return jwtEncoder.encode(JwtEncoderParameters.from(jwsHeader, jwtClaimsSet)).getTokenValue();
   }
