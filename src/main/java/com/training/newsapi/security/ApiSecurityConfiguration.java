@@ -2,6 +2,7 @@ package com.training.newsapi.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,6 +25,8 @@ public class ApiSecurityConfiguration {
                 "/v3/api-docs/**",
                 "/swagger-resources/**"
             ).permitAll()
+            .requestMatchers(HttpMethod.GET, "/api/v1/news/**", "/api/v1/news", "/api/v1/welcome")
+            .permitAll()
             .anyRequest().authenticated())
         .formLogin(config -> config.successHandler(formLoginSuccessHandler))
         .csrf(config ->
