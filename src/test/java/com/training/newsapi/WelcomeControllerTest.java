@@ -21,6 +21,6 @@ class WelcomeControllerTest {
   void welcome_shouldReturnWelcomeMessage() throws Exception {
     mockMvc.perform(get("/api/v1/welcome"))
         .andExpect(status().isOk())
-        .andExpect(content().string("Hello from application.yaml"));
+        .andExpect(content().string("Hello from WelcomeController"));
   }
 }

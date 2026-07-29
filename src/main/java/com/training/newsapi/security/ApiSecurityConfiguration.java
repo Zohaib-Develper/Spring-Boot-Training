@@ -27,6 +27,8 @@ public class ApiSecurityConfiguration {
             ).permitAll()
             .requestMatchers(HttpMethod.GET, "/api/v1/news/**", "/api/v1/news", "/api/v1/welcome")
             .permitAll()
+            .requestMatchers("/api/v1/ai/**", "/api/v1/ai")
+            .permitAll()
             .anyRequest().authenticated())
         .formLogin(config -> config.successHandler(formLoginSuccessHandler))
         .csrf(config ->
