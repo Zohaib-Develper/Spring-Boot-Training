@@ -1,6 +1,5 @@
 package com.training.newsapi.springai;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.ai.document.Document;
@@ -42,7 +41,6 @@ public class EmbeddingService {
       PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
       Resource[] resources = resolver.getResources("classpath:phones/*.json");
 
-      List<String> loadedFiles = new ArrayList<>();
       int loadedCount = 0;
 
       for (Resource resource : resources) {
@@ -50,7 +48,6 @@ public class EmbeddingService {
           JsonReader jsonReader = new JsonReader(resource);
           List<Document> documents = jsonReader.read();
           vectorStore.add(documents);
-          loadedFiles.add(resource.getFilename());
           loadedCount++;
         }
       }
