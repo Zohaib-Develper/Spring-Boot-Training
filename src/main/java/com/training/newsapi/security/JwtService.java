@@ -22,7 +22,7 @@ public class JwtService {
 
   private final JwtEncoder jwtEncoder;
   private final JwtDecoder jwtDecoder;
-  private static final Duration TOKEN_EXPIRATION = Duration.ofMinutes(5);
+  private static final Duration TOKEN_EXPIRATION = Duration.ofMinutes(15);
 
   public String generateToken(ApiUser user) {
     JwsHeader jwsHeader = JwsHeader.with(SignatureAlgorithm.PS256).build();
