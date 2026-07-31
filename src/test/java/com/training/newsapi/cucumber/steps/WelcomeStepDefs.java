@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import io.cucumber.java.en.And;
-import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +17,6 @@ public class WelcomeStepDefs {
   private MockMvc mockMvc;
 
   private ResultActions result;
-
-  @Given("the application is running")
-  public void theApplicationIsRunning() {
-    // Spring Boot context is already started by @SpringBootTest — nothing extra needed.
-  }
 
   @When("I send a GET request to {string}")
   public void iSendAGetRequestTo(String path) throws Exception {
